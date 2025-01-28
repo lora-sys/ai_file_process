@@ -1,0 +1,6 @@
+    id;text;sentiement
+    1;this is a good day;{'neg': 0.0, 'neu': 0.508, 'pos': 0.492, 'compound': 0.4404}
+    2;i am so sad today my friend;{'neg': 0.32, 'neu': 0.378, 'pos': 0.302, 'compound': -0.0498}
+    3;the weather is okay;{'neg': 0.0, 'neu': 0.612, 'pos': 0.388, 'compound': 0.2263}
+    4;this is terrible;{'neg': 0.608, 'neu': 0.392, 'pos': 0.0, 'compound': -0.4767}
+    5;i am very happy finally;{'neg': 0.0, 'neu': 0.429, 'pos': 0.571, 'compound': 0.6115}

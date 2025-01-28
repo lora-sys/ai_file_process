@@ -1,0 +1,116 @@
+2025-01-23 18:28:15,531 -ERROR-�޷���������:hello world 123
+2025-01-23 18:28:15,531 -ERROR-�޷���������:this is a test
+2025-01-23 18:28:15,532 -ERROR-�޷���������:another line
+2025-01-23 18:28:15,532 -ERROR-�޷���������:with some spaces
+2025-01-23 18:28:15,532 -ERROR-�޷���������:abc
+2025-01-23 18:28:15,532 -ERROR-�޷���������:def
+2025-01-23 18:28:15,532 -ERROR-�޷���������:ghi
+2025-01-23 18:28:15,532 -ERROR-�޷���������:hello
+2025-01-23 18:28:15,532 -ERROR-�޷���������:123456 �����˷Ƿ����ڸ�ʽ���ַ���
+2025-01-23 18:28:15,532 -ERROR-�޷���������:world
+2025-01-23 18:29:24,864 -ERROR-无法解析数字:hello world 123
+2025-01-23 18:29:24,864 -ERROR-无法解析数字:this is a test
+2025-01-23 18:29:24,864 -ERROR-无法解析数字:another line
+2025-01-23 18:29:24,864 -ERROR-无法解析数字:with some spaces
+2025-01-23 18:29:24,864 -ERROR-无法解析数字:abc
+2025-01-23 18:29:24,864 -ERROR-无法解析数字:def
+2025-01-23 18:29:24,864 -ERROR-无法解析数字:ghi
+2025-01-23 18:29:24,864 -ERROR-无法解析数字:hello
+2025-01-23 18:29:24,865 -ERROR-无法解析数字:123456 添加了非法日期格式的字符串
+2025-01-23 18:29:24,865 -ERROR-无法解析数字:world
+2025-01-23 18:50:10,547 -ERROR-尝试将使用模糊匹配数字发生错误： could not convert string to float: 'hello world 123',无法解析为数字，hello world 123
+2025-01-23 18:50:10,618 -ERROR-无法解析数字： this is a test
+2025-01-23 18:50:10,618 -ERROR-无法解析数字： another line
+2025-01-23 18:50:10,618 -ERROR-无法解析数字： with some spaces
+2025-01-23 18:50:10,618 -ERROR-无法解析数字： abc
+2025-01-23 18:50:10,618 -ERROR-无法解析数字： def
+2025-01-23 18:50:10,618 -ERROR-无法解析数字： ghi
+2025-01-23 18:50:10,618 -ERROR-无法解析数字： hello
+2025-01-23 18:50:10,618 -ERROR-尝试将使用模糊匹配数字发生错误： could not convert string to float: '123456 添加了非法日期格式的字符串',无法解析为数字，123456 添加了非法日期格式的字符串
+2025-01-23 18:50:10,619 -ERROR-无法解析数字： world
+2025-01-23 19:58:20,980 -ERROR-尝试将使用模糊匹配数字发生错误： could not convert string to float: 'hello world 123',无法解析为数字，hello world 123
+2025-01-23 19:58:52,861 -ERROR-尝试将使用模糊匹配数字发生错误： could not convert string to float: 'hello world 123',无法解析为数字，hello world 123
+2025-01-23 19:58:52,874 -ERROR-无法解析数字： this is a test
+2025-01-23 19:58:52,878 -ERROR-无法解析数字： another line
+2025-01-23 19:58:52,881 -ERROR-无法解析数字： with some spaces
+2025-01-23 19:58:52,885 -ERROR-无法解析数字： abc
+2025-01-23 19:58:52,889 -ERROR-无法解析数字： def
+2025-01-23 19:58:52,893 -ERROR-无法解析数字： ghi
+2025-01-23 19:58:52,896 -ERROR-无法解析数字： hello
+2025-01-23 19:58:52,900 -ERROR-尝试将使用模糊匹配数字发生错误： could not convert string to float: '123456 添加了非法日期格式的字符串',无法解析为数字，123456 添加了非法日期格式的字符串
+2025-01-23 19:58:52,904 -ERROR-无法解析数字： world
+2025-01-23 20:01:53,971 -ERROR-尝试将使用模糊匹配数字发生错误： could not convert string to float: 'hello world 123',无法解析为数字，hello world 123
+2025-01-23 20:01:53,986 -ERROR-无法解析数字： this is a test
+2025-01-23 20:01:53,990 -ERROR-无法解析数字： another line
+2025-01-23 20:01:53,994 -ERROR-无法解析数字： with some spaces
+2025-01-23 20:01:54,006 -ERROR-无法解析数字： abc
+2025-01-23 20:01:54,014 -ERROR-无法解析数字： def
+2025-01-23 20:01:54,027 -ERROR-无法解析数字： ghi
+2025-01-23 20:01:54,030 -ERROR-无法解析数字： hello
+2025-01-23 20:01:54,036 -ERROR-尝试将使用模糊匹配数字发生错误： could not convert string to float: '123456 添加了非法日期格式的字符串',无法解析为数字，123456 添加了非法日期格式的字符串
+2025-01-23 20:01:54,052 -ERROR-无法解析数字： world
+2025-01-23 20:02:51,211 -ERROR-尝试将使用模糊匹配数字发生错误： could not convert string to float: 'hello world 123',无法解析为数字，hello world 123
+2025-01-23 20:02:51,224 -ERROR-无法解析数字： this is a test
+2025-01-23 20:02:51,228 -ERROR-无法解析数字： another line
+2025-01-23 20:02:51,232 -ERROR-无法解析数字： with some spaces
+2025-01-23 20:02:51,243 -ERROR-无法解析数字： abc
+2025-01-23 20:02:51,251 -ERROR-无法解析数字： def
+2025-01-23 20:02:51,262 -ERROR-无法解析数字： ghi
+2025-01-23 20:02:51,266 -ERROR-无法解析数字： hello
+2025-01-23 20:02:51,270 -ERROR-尝试将使用模糊匹配数字发生错误： could not convert string to float: '123456 添加了非法日期格式的字符串',无法解析为数字，123456 添加了非法日期格式的字符串
+2025-01-23 20:02:51,286 -ERROR-无法解析数字： world
+2025-01-23 20:02:51,290 -ERROR-无法解析数字： the world is very worst
+2025-01-23 20:04:30,486 -ERROR-尝试将使用模糊匹配数字发生错误： could not convert string to float: 'hello world 123',无法解析为数字，hello world 123
+2025-01-23 20:04:30,498 -ERROR-无法解析数字： this is a test
+2025-01-23 20:04:30,503 -ERROR-无法解析数字： another line
+2025-01-23 20:04:30,506 -ERROR-无法解析数字： with some spaces
+2025-01-23 20:04:30,510 -ERROR-无法解析数字： abc
+2025-01-23 20:04:30,514 -ERROR-无法解析数字： def
+2025-01-23 20:04:30,518 -ERROR-无法解析数字： ghi
+2025-01-23 20:04:30,522 -ERROR-无法解析数字： hello
+2025-01-23 20:04:30,525 -ERROR-尝试将使用模糊匹配数字发生错误： could not convert string to float: '123456 添加了非法日期格式的字符串',无法解析为数字，123456 添加了非法日期格式的字符串
+2025-01-23 20:04:30,529 -ERROR-无法解析数字： world
+2025-01-23 20:04:30,533 -ERROR-无法解析数字： the world is very worst
+2025-01-25 10:52:59,056 -ERROR-文本预处理失败：'spacy.tokens.token.Token' object has no attribute 'is_top'
+2025-01-25 10:52:59,061 -ERROR-文本预处理失败：'spacy.tokens.token.Token' object has no attribute 'is_top'
+2025-01-25 10:53:31,121 -ERROR-无法解析数字： test sentence stopword
+2025-01-25 10:53:31,121 -ERROR-无法解析数字： test sentence
+2025-01-25 10:53:31,132 -ERROR-无法解析数字： test 
+  sentence
+2025-01-25 10:53:31,139 -ERROR-无法解析数字： test 
+  sentence
+2025-01-25 10:59:22,004 -ERROR-文本预处理失败：cannot access local variable 'process_text' where it is not associated with a value
+2025-01-25 10:59:22,014 -ERROR-文本预处理失败：cannot access local variable 'process_text' where it is not associated with a value
+2025-01-25 11:17:21,371 -ERROR-文本预处理失败：'str' object is not callable
+2025-01-25 11:17:21,371 -ERROR-文本预处理失败：'str' object is not callable
+2025-01-25 11:18:00,484 -ERROR-文本预处理失败：'str' object is not callable
+2025-01-25 11:18:00,484 -ERROR-文本预处理失败：'str' object is not callable
+2025-01-25 11:20:30,977 -ERROR-文本预处理失败：'str' object is not callable
+2025-01-25 11:20:30,977 -ERROR-文本预处理失败：'str' object is not callable
+2025-01-25 11:21:38,211 -ERROR-文本预处理失败：'str' object is not callable
+2025-01-25 11:21:38,211 -ERROR-文本预处理失败：'str' object is not callable
+2025-01-25 11:23:48,780 -ERROR-文本预处理失败：'str' object is not callable
+2025-01-25 11:23:48,780 -ERROR-文本预处理失败：'str' object is not callable
+2025-01-25 11:29:45,569 -ERROR-文本预处理失败：'str' object is not callable
+2025-01-25 11:29:45,569 -ERROR-文本预处理失败：'str' object is not callable
+2025-01-25 11:30:22,580 -ERROR-文本预处理失败：'str' object is not callable
+2025-01-25 11:30:22,580 -ERROR-文本预处理失败：'str' object is not callable
+2025-01-25 11:33:04,852 -ERROR-文本预处理失败：'str' object is not callable
+2025-01-25 11:33:04,852 -ERROR-文本预处理失败：'str' object is not callable
+2025-01-25 11:37:21,806 -ERROR-文本预处理失败：'str' object is not callable
+2025-01-25 11:37:21,806 -ERROR-文本预处理失败：'str' object is not callable
+2025-01-25 11:37:53,798 -ERROR-文本预处理失败：'str' object is not callable
+2025-01-25 11:37:53,798 -ERROR-文本预处理失败：'str' object is not callable
+2025-01-25 12:34:00,407 -ERROR-为找到匹配的语言类型：fr
+2025-01-25 12:34:00,411 -ERROR-为找到匹配的语言类型：fr
+2025-01-25 12:35:02,081 -ERROR-为找到匹配的语言类型：fr
+2025-01-25 12:35:02,084 -ERROR-为找到匹配的语言类型：fr
+2025-01-25 12:36:59,384 -ERROR-为找到匹配的语言类型：fr
+2025-01-25 12:36:59,386 -ERROR-为找到匹配的语言类型：fr
+2025-01-25 12:38:52,917 -ERROR-为找到匹配的语言类型：fr
+2025-01-25 12:38:52,921 -ERROR-为找到匹配的语言类型：fr
+2025-01-25 12:40:16,218 -ERROR-为找到匹配的语言类型：fr
+2025-01-25 12:40:16,222 -ERROR-为找到匹配的语言类型：fr
+2025-01-25 12:43:41,023 -ERROR-为找到匹配的语言类型：fr
+2025-01-25 12:43:41,026 -ERROR-为找到匹配的语言类型：fr
+2025-01-25 13:17:11,200 -ERROR-文本预处理失败：'default'

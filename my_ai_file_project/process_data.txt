@@ -1,0 +1,19 @@
+Text:hello world 123,sentiment:{'neg': 0.0, 'neu': 1.0, 'pos': 0.0, 'compound': 0.0}
+Text:this is a test,sentiment:{'neg': 0.0, 'neu': 1.0, 'pos': 0.0, 'compound': 0.0}
+Text:another line,sentiment:{'neg': 0.0, 'neu': 1.0, 'pos': 0.0, 'compound': 0.0}
+Text:with some spaces,sentiment:{'neg': 0.0, 'neu': 1.0, 'pos': 0.0, 'compound': 0.0}
+number,123,sentiment,中性
+number,314,sentiment,中性
+Text:abc,sentiment:{'neg': 0.0, 'neu': 1.0, 'pos': 0.0, 'compound': 0.0}
+number,456,sentiment,中性
+Text:def,sentiment:{'neg': 0.0, 'neu': 1.0, 'pos': 0.0, 'compound': 0.0}
+number,789,sentiment,中性
+number,987,sentiment,中性
+Text:ghi,sentiment:{'neg': 0.0, 'neu': 1.0, 'pos': 0.0, 'compound': 0.0}
+Text:hello,sentiment:{'neg': 0.0, 'neu': 1.0, 'pos': 0.0, 'compound': 0.0}
+Text:123456 添加了非法日期格式的字符串,sentiment:{'neg': 0.0, 'neu': 1.0, 'pos': 0.0, 'compound': 0.0}
+number,20231224,sentiment,中性
+number,20231224,sentiment,中性
+number,2024123,sentiment,中性
+Text:world,sentiment:{'neg': 0.0, 'neu': 1.0, 'pos': 0.0, 'compound': 0.0}
+Text:the world is very worst,sentiment:{'neg': 0.523, 'neu': 0.477, 'pos': 0.0, 'compound': -0.659}
