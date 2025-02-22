@@ -1,0 +1,1 @@
+{'text': 'world beautiful test world bad 123 apple temperature 314.159 Kelvin 2024 01 23 line special character @#$%^&*()_+=-`~ 这是一个测试', 'sentiment': {'neg': 0.139, 'neu': 0.598, 'pos': 0.263, 'compound': 0.4767}, 'numbers': None, 'date': None}

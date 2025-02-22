@@ -1,0 +1,7 @@
+2025-01-24 13:20:46,049 -ERROR-json文件格式不正确:E:\my_ai_file_project\process_file_data.csv
+2025-01-24 13:21:38,532 -ERROR-文件未找到：
+2025-01-24 13:37:21,363 -ERROR-文件未找到：
+2025-01-24 13:37:46,494 -ERROR-文件未找到：
+2025-01-24 13:39:54,009 -ERROR-json文件格式不正确:E:\my_ai_file_project\data_test.json
+2025-02-22 13:27:31,058 -ERROR-无法解析数字： world beautiful test world bad 123 apple temperature 314.159 Kelvin 2024 01 23 line special character @#$%^&*()_+=-`~ 这是一个测试
+2025-02-22 13:37:42,084 -ERROR-无法解析数字： world beautiful test world bad 123 apple temperature 314.159 Kelvin 2024 01 23 line special character @#$%^&*()_+=-`~ 这是一个测试

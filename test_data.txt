@@ -1,0 +1,8 @@
+The world is very beautiful.
+This is a test.
+The world is very worst.
+I have 123 apples.
+The temperature is 314.159 Kelvin.
+2024-01-23
+This is another line with special characters: !@#$%^&*()_+=-`~
+这是一个测试。
