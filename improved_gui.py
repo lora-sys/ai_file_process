@@ -890,9 +890,9 @@ class SmartFileProcessorGUI:
     def _process_batch_files_worker(self, input_folder, output_folder):
         """批量处理工作线程"""
         try:
-                         # 更新配置
-             original_workers = config.get('processing.max_workers')
-             config.config['processing']['max_workers'] = self.batch_workers_var.get()
+            # 更新配置
+            original_workers = config.get('processing.max_workers')
+            config.config['processing']['max_workers'] = self.batch_workers_var.get()
             
             # 处理函数
             def process_func(content):
