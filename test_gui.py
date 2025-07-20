@@ -1,187 +1,169 @@
 #!/usr/bin/env python3
 """
 GUI功能测试脚本
+测试所有GUI版本是否能正常启动
 """
 import sys
-import tkinter as tk
+import subprocess
+import time
 from pathlib import Path
 
-def test_tkinter():
-    """测试tkinter是否可用"""
-    try:
-        root = tk.Tk()
-        root.title("GUI测试")
-        root.geometry("400x300")
-        
-        # 创建测试界面
-        frame = tk.Frame(root, padding=20)
-        frame.pack(fill=tk.BOTH, expand=True)
-        
-        tk.Label(frame, text="🎉 GUI测试成功!", 
-                font=('Arial', 16, 'bold')).pack(pady=20)
-        
-        tk.Label(frame, text="tkinter界面工作正常", 
-                font=('Arial', 12)).pack(pady=10)
-        
-        # 测试按钮
-        def test_function():
-            tk.messagebox.showinfo("测试", "按钮功能正常!")
-        
-        tk.Button(frame, text="测试按钮", 
-                 command=test_function).pack(pady=10)
-        
-        tk.Button(frame, text="关闭", 
-                 command=root.quit).pack(pady=10)
-        
-        # 显示系统信息
-        info_text = f"Python版本: {sys.version.split()[0]}\n"
-        info_text += f"tkinter版本: {tk.TkVersion}\n"
-        info_text += f"系统平台: {sys.platform}"
-        
-        tk.Label(frame, text=info_text, 
-                font=('Arial', 10), justify=tk.LEFT).pack(pady=20)
-        
-        print("✅ tkinter测试窗口已打开")
-        print("如果看到测试窗口，说明GUI功能正常")
-        
-        root.mainloop()
-        return True
-        
-    except ImportError:
-        print("❌ tkinter未安装或不可用")
+def test_gui_version(script_name, gui_name):
+    """测试特定GUI版本"""
+    print(f"\n测试 {gui_name}...")
+    
+    if not Path(script_name).exists():
+        print(f"❌ {script_name} 文件不存在")
         return False
+    
+    try:
+        # 启动GUI（不等待，让它在后台运行）
+        process = subprocess.Popen([
+            sys.executable, script_name
+        ], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        
+        # 等待一小段时间看是否有错误
+        time.sleep(2)
+        
+        # 检查进程状态
+        poll_result = process.poll()
+        
+        if poll_result is None:
+            # 进程仍在运行，说明启动成功
+            print(f"✅ {gui_name} 启动成功")
+            
+            # 终止进程
+            process.terminate()
+            try:
+                process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                process.kill()
+            
+            return True
+        else:
+            # 进程已退出，可能有错误
+            stdout, stderr = process.communicate()
+            print(f"❌ {gui_name} 启动失败")
+            if stderr:
+                print(f"   错误信息: {stderr.decode('utf-8').strip()}")
+            return False
+            
     except Exception as e:
-        print(f"❌ tkinter测试失败: {e}")
+        print(f"❌ {gui_name} 测试异常: {e}")
         return False
 
-def test_dependencies():
-    """测试其他依赖"""
-    results = []
+def check_dependencies():
+    """检查依赖"""
+    print("检查依赖...")
     
-    # 测试基础模块
-    try:
-        import threading
-        results.append(("threading", True, "✅"))
-    except ImportError:
-        results.append(("threading", False, "❌"))
+    required_modules = [
+        "tkinter",
+        "pathlib",
+        "json",
+        "threading",
+        "queue"
+    ]
     
-    try:
-        import queue
-        results.append(("queue", True, "✅"))
-    except ImportError:
-        results.append(("queue", False, "❌"))
+    optional_modules = [
+        "tkinterdnd2"  # 高级GUI需要
+    ]
     
-    # 测试项目模块
-    try:
-        from config import config
-        results.append(("config", True, "✅"))
-    except ImportError:
-        results.append(("config", False, "❌"))
+    missing_required = []
+    missing_optional = []
     
-    try:
-        from simple_gui import SimpleFileProcessorGUI
-        results.append(("simple_gui", True, "✅"))
-    except ImportError:
-        results.append(("simple_gui", False, "❌"))
+    for module in required_modules:
+        try:
+            __import__(module)
+            print(f"✅ {module}")
+        except ImportError:
+            missing_required.append(module)
+            print(f"❌ {module} (必需)")
     
-    # 测试可选模块
-    try:
-        import spacy
-        results.append(("spacy", True, "✅ (NLP功能可用)"))
-    except ImportError:
-        results.append(("spacy", False, "⚠️ (NLP功能受限)"))
+    for module in optional_modules:
+        try:
+            __import__(module)
+            print(f"✅ {module}")
+        except ImportError:
+            missing_optional.append(module)
+            print(f"⚠️  {module} (可选，高级GUI需要)")
     
-    try:
-        import nltk
-        results.append(("nltk", True, "✅ (情感分析可用)"))
-    except ImportError:
-        results.append(("nltk", False, "⚠️ (情感分析受限)"))
-    
-    return results
+    return missing_required, missing_optional
 
 def main():
-    """主测试函数"""
+    """主函数"""
+    print("🧪 GUI功能测试脚本")
     print("=" * 50)
-    print("智能文件处理工具 - GUI测试")
-    print("=" * 50)
     
-    # 检查Python版本
-    print(f"Python版本: {sys.version}")
-    if sys.version_info < (3, 6):
-        print("❌ 需要Python 3.6或更高版本")
-        return False
-    
-    print("✅ Python版本符合要求")
-    print()
-    
-    # 测试依赖
-    print("检查依赖模块:")
-    print("-" * 30)
-    
-    deps = test_dependencies()
-    for name, available, status in deps:
-        print(f"{status} {name}")
-    
-    print()
-    
-    # 检查必需的依赖
-    required_deps = ["threading", "queue", "simple_gui"]
-    missing_required = [name for name, available, _ in deps 
-                       if name in required_deps and not available]
+    # 检查依赖
+    missing_required, missing_optional = check_dependencies()
     
     if missing_required:
-        print(f"❌ 缺少必需的依赖: {', '.join(missing_required)}")
-        print("请检查文件是否完整")
-        return False
+        print(f"\n❌ 缺少必需依赖: {', '.join(missing_required)}")
+        print("请运行: pip install -r requirements.txt")
+        return 1
     
-    print("✅ 基础依赖检查通过")
-    print()
+    if missing_optional:
+        print(f"\n⚠️  缺少可选依赖: {', '.join(missing_optional)}")
+        print("高级GUI功能可能不可用")
     
-    # 测试tkinter
-    print("测试图形界面:")
-    print("-" * 30)
+    print("\n" + "=" * 50)
+    print("开始测试GUI版本...")
     
-    if not test_tkinter():
-        print("❌ GUI测试失败")
-        return False
+    # 测试各个GUI版本
+    test_results = []
     
-    print("✅ GUI测试通过")
-    print()
+    # 测试GUI启动器
+    result = test_gui_version("gui_launcher.py", "GUI启动器")
+    test_results.append(("GUI启动器", result))
     
-    # 总结
-    print("=" * 50)
-    print("测试完成!")
+    # 测试原版GUI
+    result = test_gui_version("gui.py", "原版GUI")
+    test_results.append(("原版GUI", result))
     
-    optional_missing = [name for name, available, _ in deps 
-                       if name in ["spacy", "nltk"] and not available]
+    # 测试现代GUI
+    result = test_gui_version("improved_gui.py", "现代GUI")
+    test_results.append(("现代GUI", result))
     
-    if optional_missing:
-        print("⚠️  可选功能:")
-        for name in optional_missing:
-            if name == "spacy":
-                print("   - NLP功能受限（可安装spacy获得完整功能）")
-            elif name == "nltk":
-                print("   - 情感分析受限（可安装nltk获得完整功能）")
-        print("   但基础GUI功能仍可正常使用")
+    # 测试高级GUI
+    if "tkinterdnd2" not in missing_optional:
+        result = test_gui_version("advanced_gui.py", "高级GUI")
+        test_results.append(("高级GUI", result))
     else:
-        print("🎉 所有功能都可用!")
+        print(f"\n⚠️  跳过高级GUI测试（缺少tkinterdnd2）")
+        test_results.append(("高级GUI", "跳过"))
     
-    print()
-    print("建议:")
-    print("1. 运行 'python simple_gui.py' 启动简化版GUI")
-    print("2. 运行 'python run_gui.py' 启动完整版GUI")
+    # 测试结果汇总
+    print("\n" + "=" * 50)
+    print("测试结果汇总:")
+    print("=" * 50)
     
-    return True
+    for name, result in test_results:
+        if result is True:
+            print(f"✅ {name}: 通过")
+        elif result is False:
+            print(f"❌ {name}: 失败")
+        else:
+            print(f"⚠️  {name}: {result}")
+    
+    # 统计
+    passed = sum(1 for _, result in test_results if result is True)
+    total = len([r for _, r in test_results if r is not "跳过"])
+    
+    print(f"\n📊 测试统计: {passed}/{total} 通过")
+    
+    if passed == total:
+        print("🎉 所有GUI版本测试通过！")
+        return 0
+    else:
+        print("⚠️  部分GUI版本测试失败，请检查错误信息")
+        return 1
 
 if __name__ == "__main__":
     try:
-        success = main()
-        if not success:
-            input("按Enter键退出...")
+        sys.exit(main())
     except KeyboardInterrupt:
-        print("\n测试被用户中断")
+        print("\n\n用户中断测试")
+        sys.exit(1)
     except Exception as e:
-        print(f"\n测试过程中发生错误: {e}")
-        import traceback
-        traceback.print_exc()
-        input("按Enter键退出...")
+        print(f"\n测试脚本运行异常: {e}")
+        sys.exit(1)
