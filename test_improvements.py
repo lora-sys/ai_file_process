@@ -128,6 +128,7 @@ def test_integration():
         print(f"✗ 集成测试失败: {e}")
         return False
 
+
 def test_gui():
     """测试GUI模块"""
     print("\n" + "=" * 50)
@@ -182,6 +183,7 @@ def test_gui():
 
 
 
+
 def main():
     """主测试函数"""
     print("智能文件处理工具 - 改进测试")
@@ -194,7 +196,10 @@ def main():
     test_results.append(test_file_handler())
     test_results.append(test_data_processor())
     test_results.append(test_integration())
+
     test_results.append(test_gui())
+
+
     
     # 总结
     print("\n" + "=" * 50)

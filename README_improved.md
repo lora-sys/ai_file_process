@@ -1,6 +1,10 @@
 # 智能文件处理工具 v2.0
 
+
 一个功能强大的智能文件处理工具，支持多种文件格式的文本分析、情感识别、实体提取等功能。提供命令行和图形界面两种使用方式。
+
+一个功能强大的智能文件处理工具，支持多种文件格式的文本分析、情感识别、实体提取等功能。
+
 
 ## ✨ 主要特性
 
@@ -10,6 +14,7 @@
 - 📁 **多格式支持**: 支持 `.txt`, `.csv`, `.json`, `.pdf`, `.xlsx` 等格式
 - ⚡ **并发处理**: 多线程批量处理，提高效率
 - 🎯 **多种输出**: 支持摘要、JSON、纯文本等输出格式
+
 - 🎨 **多种GUI**: 三种不同层次的图形界面，支持拖拽、实时预览等
 - 🛠️ **可配置**: 灵活的配置系统，易于定制
 
@@ -28,11 +33,30 @@ pip install -r requirements.txt
 
 ### 2. 下载NLP模型（可选，用于完整功能）
 
+=======
+- 🛠️ **可配置**: 灵活的配置系统，易于定制
+
+## 🚀 安装
+
+1. 克隆项目:
+```bash
+git clone <repository-url>
+cd file-processing-tool
+```
+
+2. 安装依赖:
+```bash
+pip install -r requirements.txt
+```
+
+3. 下载必要的NLP模型:
+
 ```bash
 python -m spacy download en_core_web_sm
 python -m spacy download zh_core_web_sm
 python -m spacy download xx_ent_wiki_sm
 ```
+
 
 > **注意**: 如果没有安装NLP模型，程序会以简化模式运行，仍可进行基本的文件处理。
 
@@ -126,6 +150,10 @@ python3 run_gui.py
    - 处理日志: 详细的处理过程记录
 
 ### 💻 命令行界面
+=======
+## 📖 使用方法
+
+### 命令行界面
 
 ```bash
 # 处理单个文件
@@ -144,7 +172,10 @@ python improved_main.py --config
 python improved_main.py document.txt output.txt --verbose
 ```
 
+
 ### 🐍 Python API
+=======
+### Python API
 
 ```python
 from improved_file_handler import file_handler
@@ -239,6 +270,7 @@ python test_improvements.py
 ## 📁 项目结构
 
 ```
+
 ├── config.py                      # 配置管理模块
 ├── improved_file_handler.py       # 增强文件处理模块
 ├── improved_data_processor.py     # 增强数据处理模块
@@ -255,11 +287,21 @@ python test_improvements.py
 ├── main.py                        # 原始主程序（保留）
 ├── file_handler.py                # 原始文件处理（保留）
 └── data_processor.py              # 原始数据处理（保留）
+=======
+├── config.py                     # 配置管理
+├── improved_file_handler.py      # 文件处理模块
+├── improved_data_processor.py    # 数据处理模块
+├── improved_main.py              # 主程序
+├── test_improvements.py          # 测试脚本
+├── requirements.txt              # 依赖列表
+└── README_improved.md            # 说明文档
+
 ```
 
 ## 🔧 主要改进
 
 相比原版本，v2.0 包含以下重要改进:
+
 
 ### 1. 用户界面
 - ✅ 全新的现代化GUI界面
@@ -338,6 +380,48 @@ python -m spacy download zh_core_web_sm
 - 📊 实时处理进度
 - 🔧 完全重构代码架构
 - 📈 性能显著提升
+=======
+### 1. 代码质量
+- ✅ 修正所有拼写错误
+- ✅ 添加类型提示
+- ✅ 统一编码规范
+- ✅ 优化异常处理
+
+### 2. 功能增强
+- ✅ 智能语言检测
+- ✅ 实体识别
+- ✅ 多种输出格式
+- ✅ 详细统计信息
+- ✅ 进度条显示
+
+### 3. 性能优化
+- ✅ 模型单例模式
+- ✅ 并发处理优化
+- ✅ 内存使用优化
+- ✅ 错误恢复机制
+
+### 4. 架构改进
+- ✅ 模块解耦
+- ✅ 配置管理系统
+- ✅ 可扩展架构
+- ✅ 完整测试覆盖
+
+## 🐛 问题修复
+
+- 🔧 修复数字解析错误
+- 🔧 改进文件编码检测
+- 🔧 优化内存使用
+- 🔧 增强错误日志
+
+## 📝 更新日志
+
+### v2.0 (Current)
+- 完全重构代码架构
+- 添加配置管理系统
+- 实现并发处理
+- 增加实体识别功能
+- 支持多种输出格式
+
 
 ### v1.0 (Original)
 - 基础文件处理功能

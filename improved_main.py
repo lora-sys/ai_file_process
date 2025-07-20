@@ -163,6 +163,7 @@ def main():
         print(f"- 情感分析: {'启用' if config.get('nlp.sentiment_analysis') else '禁用'}")
         return 0
     
+
     # 检查是否启动GUI
     if not args.input and not args.output:
         # 如果没有提供参数，启动GUI
