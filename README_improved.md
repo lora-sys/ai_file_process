@@ -34,7 +34,48 @@ python -m spacy download xx_ent_wiki_sm
 
 ## 📖 使用方法
 
-### 命令行界面
+### 🖥️ 图形界面 (推荐)
+
+启动现代化图形界面：
+
+```bash
+python run_gui.py
+```
+
+#### 🌟 GUI特性：
+- 🎯 **直观操作**: 点击按钮选择文件，无需记忆命令
+- 📊 **实时进度**: 显示处理进度和状态信息  
+- 📋 **结果预览**: 直接在界面中查看处理结果
+- 💾 **快速导出**: 多格式一键导出结果
+- ⚙️ **配置管理**: 图形化配置管理界面
+- 🔄 **批量处理**: 支持文件夹批量处理
+- 📱 **现代设计**: 清晰的现代化界面
+- 📈 **统计分析**: 详细的处理统计和分析结果
+- 🎨 **多主题支持**: 支持不同的界面主题
+
+#### 🚀 GUI使用步骤：
+
+**单文件处理：**
+1. 在"单文件处理"选项卡中选择输入文件
+2. 选择输出文件位置
+3. 选择输出格式（摘要/JSON/文本）
+4. 点击"开始处理"
+5. 查看处理结果和统计信息
+
+**批量处理：**
+1. 切换到"批量处理"选项卡
+2. 选择输入文件夹和输出文件夹
+3. 设置并发处理数和输出格式
+4. 点击"开始批量处理"
+5. 观察进度条和处理日志
+
+**结果查看：**
+1. 切换到"结果查看"选项卡
+2. 查看处理统计信息
+3. 选择不同的查看格式
+4. 导出结果到文件
+
+### 🖱️ 命令行界面
 
 ```bash
 # 处理单个文件
@@ -53,7 +94,7 @@ python improved_main.py --config
 python improved_main.py document.txt output.txt --verbose
 ```
 
-### Python API
+### 🐍 Python API
 
 ```python
 from improved_file_handler import file_handler
@@ -151,7 +192,9 @@ python test_improvements.py
 ├── config.py                     # 配置管理
 ├── improved_file_handler.py      # 文件处理模块
 ├── improved_data_processor.py    # 数据处理模块
-├── improved_main.py              # 主程序
+├── improved_main.py              # 命令行主程序
+├── improved_gui.py               # 图形界面
+├── run_gui.py                    # GUI启动脚本
 ├── test_improvements.py          # 测试脚本
 ├── requirements.txt              # 依赖列表
 └── README_improved.md            # 说明文档
@@ -185,6 +228,12 @@ python test_improvements.py
 - ✅ 配置管理系统
 - ✅ 可扩展架构
 - ✅ 完整测试覆盖
+
+### 5. 用户界面
+- ✅ 现代化GUI界面
+- ✅ 实时进度显示
+- ✅ 直观的文件选择
+- ✅ 结果预览和操作
 
 ## 🐛 问题修复
 

@@ -128,6 +128,37 @@ def test_integration():
         print(f"✗ 集成测试失败: {e}")
         return False
 
+def test_gui():
+    """测试GUI模块"""
+    print("\n" + "=" * 50)
+    print("测试GUI模块")
+    print("=" * 50)
+    
+    try:
+        # 测试GUI模块导入
+        from improved_gui import ModernGUI, ConfigWindow, HelpWindow
+        print(f"✓ GUI模块导入成功")
+        
+        # 测试GUI类创建（不显示窗口）
+        try:
+            import tkinter as tk
+            # 测试tkinter是否可用
+            root = tk.Tk()
+            root.withdraw()  # 隐藏窗口
+            root.destroy()
+            print(f"  - tkinter环境: ✓ 可用")
+        except Exception as e:
+            print(f"  - tkinter环境: ⚠ 不可用 ({e})")
+            return True  # GUI不可用不算失败
+        
+        print(f"  - GUI组件: ✓ 所有组件可导入")
+        print(f"  - 注意: GUI需要图形环境才能完全测试")
+        
+        return True
+    except Exception as e:
+        print(f"✗ GUI测试失败: {e}")
+        return False
+
 def main():
     """主测试函数"""
     print("智能文件处理工具 - 改进测试")
@@ -140,6 +171,7 @@ def main():
     test_results.append(test_file_handler())
     test_results.append(test_data_processor())
     test_results.append(test_integration())
+    test_results.append(test_gui())
     
     # 总结
     print("\n" + "=" * 50)

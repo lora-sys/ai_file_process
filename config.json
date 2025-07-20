@@ -1,0 +1,29 @@
+{
+  "processing": {
+    "max_file_size_mb": 100,
+    "chunk_size": 1024,
+    "max_workers": 4,
+    "supported_formats": [".txt", ".csv", ".json", ".pdf", ".xlsx", ".docx"]
+  },
+  "nlp": {
+    "models": {
+      "en": "en_core_web_sm",
+      "zh": "zh_core_web_sm",
+      "multi": "xx_ent_wiki_sm"
+    },
+    "detect_language": true,
+    "sentiment_analysis": true
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "app.log",
+    "max_file_size_mb": 10,
+    "backup_count": 3
+  },
+  "output": {
+    "format": "txt",
+    "encoding": "utf-8",
+    "generate_summary": true,
+    "include_statistics": true
+  }
+}

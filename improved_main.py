@@ -163,6 +163,24 @@ def main():
         print(f"- 情感分析: {'启用' if config.get('nlp.sentiment_analysis') else '禁用'}")
         return 0
     
+    # 检查是否启动GUI
+    if not args.input and not args.output:
+        # 如果没有提供参数，启动GUI
+        try:
+            from modern_gui import ModernFileProcessorGUI
+            print("启动图形用户界面...")
+            app = ModernFileProcessorGUI()
+            app.run()
+            return 0
+        except ImportError:
+            print("警告: 无法启动GUI，缺少相关模块")
+            parser.print_help()
+            return 1
+        except Exception as e:
+            print(f"启动GUI失败: {e}")
+            parser.print_help()
+            return 1
+    
     # 检查参数
     if not args.input or not args.output:
         parser.print_help()
