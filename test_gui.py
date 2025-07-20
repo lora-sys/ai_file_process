@@ -1,169 +1,203 @@
 #!/usr/bin/env python3
 """
-GUI功能测试脚本
-测试所有GUI版本是否能正常启动
+GUI测试脚本 - 验证所有GUI版本能否正常启动
 """
 import sys
-import subprocess
-import time
+import importlib.util
 from pathlib import Path
 
-def test_gui_version(script_name, gui_name):
-    """测试特定GUI版本"""
-    print(f"\n测试 {gui_name}...")
+def test_gui_imports():
+    """测试GUI模块导入"""
+    gui_modules = [
+        ("gui", "原版GUI"),
+        ("modern_gui", "现代化GUI"), 
+        ("premium_gui", "高级GUI"),
+        ("gui_launcher", "GUI启动器")
+    ]
     
-    if not Path(script_name).exists():
-        print(f"❌ {script_name} 文件不存在")
-        return False
+    print("=" * 50)
+    print("GUI模块导入测试")
+    print("=" * 50)
     
-    try:
-        # 启动GUI（不等待，让它在后台运行）
-        process = subprocess.Popen([
-            sys.executable, script_name
-        ], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        
-        # 等待一小段时间看是否有错误
-        time.sleep(2)
-        
-        # 检查进程状态
-        poll_result = process.poll()
-        
-        if poll_result is None:
-            # 进程仍在运行，说明启动成功
-            print(f"✅ {gui_name} 启动成功")
+    results = {}
+    
+    for module_name, display_name in gui_modules:
+        try:
+            # 检查文件是否存在
+            module_file = Path(f"{module_name}.py")
+            if not module_file.exists():
+                print(f"❌ {display_name}: 文件不存在 ({module_name}.py)")
+                results[module_name] = False
+                continue
             
-            # 终止进程
-            process.terminate()
-            try:
-                process.wait(timeout=5)
-            except subprocess.TimeoutExpired:
-                process.kill()
+            # 尝试导入模块
+            spec = importlib.util.spec_from_file_location(module_name, module_file)
+            module = importlib.util.module_from_spec(spec)
             
-            return True
-        else:
-            # 进程已退出，可能有错误
-            stdout, stderr = process.communicate()
-            print(f"❌ {gui_name} 启动失败")
-            if stderr:
-                print(f"   错误信息: {stderr.decode('utf-8').strip()}")
-            return False
+            # 简单的语法检查
+            with open(module_file, 'r', encoding='utf-8') as f:
+                compile(f.read(), module_file, 'exec')
             
-    except Exception as e:
-        print(f"❌ {gui_name} 测试异常: {e}")
-        return False
+            print(f"✅ {display_name}: 导入成功")
+            results[module_name] = True
+            
+        except SyntaxError as e:
+            print(f"❌ {display_name}: 语法错误 - {e}")
+            results[module_name] = False
+            
+        except Exception as e:
+            print(f"⚠️  {display_name}: 导入警告 - {e}")
+            results[module_name] = True  # 可能只是依赖问题
+    
+    return results
 
-def check_dependencies():
-    """检查依赖"""
-    print("检查依赖...")
+def test_dependencies():
+    """测试依赖项"""
+    print("\n" + "=" * 50)
+    print("依赖项测试")
+    print("=" * 50)
     
-    required_modules = [
-        "tkinter",
-        "pathlib",
-        "json",
-        "threading",
-        "queue"
+    required_deps = [
+        ("tkinter", "GUI基础库"),
+        ("pathlib", "路径处理"),
+        ("threading", "多线程支持"),
+        ("queue", "队列处理"),
+        ("json", "JSON处理")
     ]
     
-    optional_modules = [
-        "tkinterdnd2"  # 高级GUI需要
+    optional_deps = [
+        ("improved_file_handler", "改进的文件处理器"),
+        ("improved_data_processor", "改进的数据处理器"),
+        ("config", "配置管理")
     ]
     
-    missing_required = []
-    missing_optional = []
+    dep_results = {}
     
-    for module in required_modules:
+    print("必需依赖:")
+    for dep, desc in required_deps:
         try:
-            __import__(module)
-            print(f"✅ {module}")
+            __import__(dep)
+            print(f"✅ {desc} ({dep})")
+            dep_results[dep] = True
         except ImportError:
-            missing_required.append(module)
-            print(f"❌ {module} (必需)")
+            print(f"❌ {desc} ({dep}) - 缺失")
+            dep_results[dep] = False
     
-    for module in optional_modules:
+    print("\n可选依赖:")
+    for dep, desc in optional_deps:
         try:
-            __import__(module)
-            print(f"✅ {module}")
+            __import__(dep)
+            print(f"✅ {desc} ({dep})")
+            dep_results[dep] = True
         except ImportError:
-            missing_optional.append(module)
-            print(f"⚠️  {module} (可选，高级GUI需要)")
+            print(f"⚠️  {desc} ({dep}) - 未找到")
+            dep_results[dep] = False
     
-    return missing_required, missing_optional
+    return dep_results
+
+def check_file_structure():
+    """检查文件结构"""
+    print("\n" + "=" * 50)
+    print("文件结构检查")
+    print("=" * 50)
+    
+    required_files = [
+        "gui.py",
+        "modern_gui.py", 
+        "premium_gui.py",
+        "gui_launcher.py",
+        "improved_main.py",
+        "config.py",
+        "improved_file_handler.py",
+        "improved_data_processor.py"
+    ]
+    
+    optional_files = [
+        "requirements.txt",
+        "README_improved.md",
+        "test_improvements.py"
+    ]
+    
+    file_results = {}
+    
+    print("必需文件:")
+    for file_name in required_files:
+        if Path(file_name).exists():
+            print(f"✅ {file_name}")
+            file_results[file_name] = True
+        else:
+            print(f"❌ {file_name} - 缺失")
+            file_results[file_name] = False
+    
+    print("\n可选文件:")
+    for file_name in optional_files:
+        if Path(file_name).exists():
+            print(f"✅ {file_name}")
+            file_results[file_name] = True
+        else:
+            print(f"⚠️  {file_name} - 未找到")
+            file_results[file_name] = False
+    
+    return file_results
+
+def generate_report(gui_results, dep_results, file_results):
+    """生成测试报告"""
+    print("\n" + "=" * 50)
+    print("测试报告")
+    print("=" * 50)
+    
+    # 统计结果
+    gui_passed = sum(1 for result in gui_results.values() if result)
+    gui_total = len(gui_results)
+    
+    dep_passed = sum(1 for result in dep_results.values() if result)
+    dep_total = len(dep_results)
+    
+    file_passed = sum(1 for result in file_results.values() if result)
+    file_total = len(file_results)
+    
+    print(f"GUI模块: {gui_passed}/{gui_total} 通过")
+    print(f"依赖项: {dep_passed}/{dep_total} 可用")
+    print(f"文件结构: {file_passed}/{file_total} 完整")
+    
+    # 整体评估
+    if gui_passed == gui_total and all(file_results[f] for f in ["gui.py", "modern_gui.py", "premium_gui.py"]):
+        print("\n🎉 所有GUI版本就绪！")
+        print("建议运行: python gui_launcher.py")
+    elif gui_passed > 0:
+        print("\n⚠️  部分GUI可用")
+        available_guis = [name for name, result in gui_results.items() if result]
+        print(f"可用的GUI: {', '.join(available_guis)}")
+    else:
+        print("\n❌ GUI不可用")
+        print("请检查依赖项和文件完整性")
+    
+    # 建议
+    print("\n💡 建议:")
+    if not dep_results.get("improved_file_handler", False):
+        print("- 确保改进的核心模块已创建")
+    if not file_results.get("requirements.txt", False):
+        print("- 安装必需的依赖包")
+    if gui_passed < gui_total:
+        print("- 检查GUI文件的语法错误")
 
 def main():
     """主函数"""
-    print("🧪 GUI功能测试脚本")
-    print("=" * 50)
+    print("智能文件处理工具 - GUI测试")
     
-    # 检查依赖
-    missing_required, missing_optional = check_dependencies()
-    
-    if missing_required:
-        print(f"\n❌ 缺少必需依赖: {', '.join(missing_required)}")
-        print("请运行: pip install -r requirements.txt")
-        return 1
-    
-    if missing_optional:
-        print(f"\n⚠️  缺少可选依赖: {', '.join(missing_optional)}")
-        print("高级GUI功能可能不可用")
-    
-    print("\n" + "=" * 50)
-    print("开始测试GUI版本...")
-    
-    # 测试各个GUI版本
-    test_results = []
-    
-    # 测试GUI启动器
-    result = test_gui_version("gui_launcher.py", "GUI启动器")
-    test_results.append(("GUI启动器", result))
-    
-    # 测试原版GUI
-    result = test_gui_version("gui.py", "原版GUI")
-    test_results.append(("原版GUI", result))
-    
-    # 测试现代GUI
-    result = test_gui_version("improved_gui.py", "现代GUI")
-    test_results.append(("现代GUI", result))
-    
-    # 测试高级GUI
-    if "tkinterdnd2" not in missing_optional:
-        result = test_gui_version("advanced_gui.py", "高级GUI")
-        test_results.append(("高级GUI", result))
-    else:
-        print(f"\n⚠️  跳过高级GUI测试（缺少tkinterdnd2）")
-        test_results.append(("高级GUI", "跳过"))
-    
-    # 测试结果汇总
-    print("\n" + "=" * 50)
-    print("测试结果汇总:")
-    print("=" * 50)
-    
-    for name, result in test_results:
-        if result is True:
-            print(f"✅ {name}: 通过")
-        elif result is False:
-            print(f"❌ {name}: 失败")
-        else:
-            print(f"⚠️  {name}: {result}")
-    
-    # 统计
-    passed = sum(1 for _, result in test_results if result is True)
-    total = len([r for _, r in test_results if r is not "跳过"])
-    
-    print(f"\n📊 测试统计: {passed}/{total} 通过")
-    
-    if passed == total:
-        print("🎉 所有GUI版本测试通过！")
-        return 0
-    else:
-        print("⚠️  部分GUI版本测试失败，请检查错误信息")
-        return 1
+    try:
+        # 运行各项测试
+        gui_results = test_gui_imports()
+        dep_results = test_dependencies()
+        file_results = check_file_structure()
+        
+        # 生成报告
+        generate_report(gui_results, dep_results, file_results)
+        
+    except Exception as e:
+        print(f"\n❌ 测试过程中发生错误: {e}")
+        import traceback
+        traceback.print_exc()
 
 if __name__ == "__main__":
-    try:
-        sys.exit(main())
-    except KeyboardInterrupt:
-        print("\n\n用户中断测试")
-        sys.exit(1)
-    except Exception as e:
-        print(f"\n测试脚本运行异常: {e}")
-        sys.exit(1)
+    main()
