@@ -244,9 +244,11 @@ python test_improvements.py
 ├── improved_data_processor.py     # 增强数据处理模块
 ├── improved_main.py               # 命令行主程序
 ├── improved_gui.py                # 现代化GUI界面 ✨
+├── demo_gui.py                    # 演示版GUI ✨
 ├── run_gui.py                     # GUI启动脚本 ✨
+├── start_gui.sh                   # Linux/Mac启动脚本 ✨
+├── start_gui.bat                  # Windows启动脚本 ✨
 ├── test_improvements.py           # 测试脚本
-├── GUI_FEATURES.md                # GUI功能详细说明 ✨
 ├── requirements.txt               # 依赖列表
 ├── README_improved.md             # 详细说明文档
 ├── gui.py                         # 原始GUI（保留）
