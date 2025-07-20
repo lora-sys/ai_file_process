@@ -7,3 +7,17 @@ python-docx==0.8.11
 openpyxl==3.0.10
 tqdm==4.65.0
 pydantic==2.5.0
+# Windows桌面快捷方式支持（可选）
+winshell; sys_platform == "win32"
+pywin32; sys_platform == "win32"
+tkinterdnd2==0.3.0
+Pillow==10.0.0
+
+# GUI相关依赖（tkinter通常内置在Python中）
+# 如果需要更好的GUI主题支持，可以安装：
+# tkthemes==3.2.2
+# ttkthemes==3.2.2
+pillow>=8.0.0
+=======
+pydantic==2.5.0
+

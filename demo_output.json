@@ -1,0 +1,39 @@
+{
+  "original_text": "Hello world! This is a fantastic demonstration.\n        \n        Our tool can process various types of content:\n        - Numbers: 42, 3.14159, 1,234.56\n        - Dates: 2024-01-15, 12/25/2023  \n        - Emotions: I'm very excited and happy about this project!\n        - Mixed content: The temperature is 25.5°C today.\n        \n        这是一个包含中文的测试文档。\n        日期：2024年1月15日\n        数字：100, 200.5\n        \n        This comprehensive test will showcase our processing capabilities.",
+  "processed_text": "hello world fantastic demonstration tool can process various types content numbers 42 3 14159 1 234 56 dates 2024 01 15 12 25 2023 emotions m very excited happy about project mixed content temperature 25 5 c today 这是一个包含中文的测试文档 日期 2024年1月15日 数字 100 200 5 comprehensive test will showcase processing capabilities",
+  "language": "en",
+  "statistics": {
+    "char_count": 479,
+    "word_count": 63,
+    "sentence_count": 10
+  },
+  "extracted_data": {
+    "numbers": [
+      1.0,
+      3.0,
+      3.14159,
+      5.0,
+      12.0,
+      15.0,
+      25.0,
+      25.5,
+      42.0,
+      56.0,
+      100.0,
+      200.0,
+      200.5,
+      234.0,
+      234.56,
+      1234.56,
+      2023.0,
+      2024.0,
+      14159.0
+    ],
+    "dates": [
+      "12/25/2023",
+      "2024-01-15",
+      "2024年1月15日"
+    ]
+  },
+  "timestamp": "2025-07-20T00:19:16.165509"
+}

@@ -1,0 +1,9 @@
+语言: en
+字符数: 479
+词数: 63
+句子数: 10
+发现数字: 19个 [1.0, 3.0, 3.14159, 5.0, 12.0, 15.0, 25.0, 25.5, 42.0, 56.0, 100.0, 200.0, 200.5, 234.0, 234.56, 1234.56, 2023.0, 2024.0, 14159.0]
+发现日期: 3个 ['12/25/2023', '2024-01-15', '2024年1月15日']
+
+处理后文本:
+hello world fantastic demonstration tool can process various types content numbers 42 3 14159 1 234 56 dates 2024 01 15 12 25 2023 emotions m very excited happy about project mixed content temperature...

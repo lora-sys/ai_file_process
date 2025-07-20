@@ -1,0 +1,13 @@
+Hello world! This is a fantastic demonstration.
+        
+        Our tool can process various types of content:
+        - Numbers: 42, 3.14159, 1,234.56
+        - Dates: 2024-01-15, 12/25/2023  
+        - Emotions: I'm very excited and happy about this project!
+        - Mixed content: The temperature is 25.5°C today.
+        
+        这是一个包含中文的测试文档。
+        日期：2024年1月15日
+        数字：100, 200.5
+        
+        This comprehensive test will showcase our processing capabilities.
