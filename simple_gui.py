@@ -1,532 +1,305 @@
 #!/usr/bin/env python3
 """
-智能文件处理工具 - 简化GUI界面
+智能文件处理工具 - 简化版GUI
+适用于依赖不完整的环境
 """
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox, scrolledtext
 import threading
 import queue
-import time
+import json
 import os
 from pathlib import Path
 
-try:
-    from improved_file_handler import file_handler
-    from improved_data_processor import text_processor, result_formatter
-    from config import config
-except ImportError:
-    # 如果导入失败，使用原始模块
-    print("使用简化模式运行...")
-    file_handler = None
-    text_processor = None
-    result_formatter = None
-
 class SimpleFileProcessorGUI:
-    """简化版文件处理器GUI"""
+    """简化版文件处理GUI"""
     
     def __init__(self):
         self.root = tk.Tk()
-        self.setup_window()
-        self.setup_variables()
-        self.create_widgets()
-        
-        # 处理队列
-        self.queue = queue.Queue()
-        self.is_processing = False
-        
-        # 启动队列检查
-        self.check_queue()
-    
-    def setup_window(self):
-        """设置主窗口"""
-        self.root.title("智能文件处理工具 v2.0")
-        self.root.geometry("900x600")
+        self.root.title("智能文件处理工具 - 简化版")
+        self.root.geometry("800x600")
         self.root.minsize(700, 500)
         
-        # 配置样式
-        style = ttk.Style()
-        try:
-            style.theme_use('clam')
-        except:
-            pass
-    
-    def setup_variables(self):
-        """设置变量"""
-        self.input_path = tk.StringVar()
-        self.output_path = tk.StringVar()
-        self.processing_mode = tk.StringVar(value="single")
-        self.output_format = tk.StringVar(value="summary")
-        self.progress_var = tk.DoubleVar()
-        self.status_var = tk.StringVar(value="就绪")
-    
-    def create_widgets(self):
-        """创建界面组件"""
-        # 主框架
-        main_frame = ttk.Frame(self.root, padding="10")
+        # 初始化变量
+        self.result_queue = queue.Queue()
+        self.current_task = None
+        
+        self.setup_ui()
+        
+    def setup_ui(self):
+        """设置用户界面"""
+        # 主容器
+        main_frame = ttk.Frame(self.root, padding="20")
         main_frame.pack(fill=tk.BOTH, expand=True)
         
         # 标题
-        title_label = ttk.Label(main_frame, text="智能文件处理工具", 
-                               font=('Arial', 16, 'bold'))
+        title_label = ttk.Label(
+            main_frame,
+            text="智能文件处理工具 - 简化版",
+            font=('Arial', 16, 'bold')
+        )
         title_label.pack(pady=(0, 20))
         
-        # 处理模式
-        mode_frame = ttk.LabelFrame(main_frame, text="处理模式", padding="10")
-        mode_frame.pack(fill=tk.X, pady=(0, 10))
+        # 输入文件选择
+        input_frame = ttk.LabelFrame(main_frame, text="输入文件", padding="10")
+        input_frame.pack(fill=tk.X, pady=(0, 15))
         
-        ttk.Radiobutton(mode_frame, text="单文件处理", 
-                       variable=self.processing_mode, value="single",
-                       command=self.on_mode_change).pack(side=tk.LEFT, padx=(0, 20))
-        ttk.Radiobutton(mode_frame, text="批量处理", 
-                       variable=self.processing_mode, value="batch",
-                       command=self.on_mode_change).pack(side=tk.LEFT)
+        input_row = ttk.Frame(input_frame)
+        input_row.pack(fill=tk.X)
         
-        # 文件选择
-        file_frame = ttk.LabelFrame(main_frame, text="文件选择", padding="10")
-        file_frame.pack(fill=tk.X, pady=(0, 10))
+        self.input_var = tk.StringVar()
+        input_entry = ttk.Entry(input_row, textvariable=self.input_var)
+        input_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 10))
         
-        # 输入
-        input_frame = ttk.Frame(file_frame)
-        input_frame.pack(fill=tk.X, pady=(0, 5))
+        ttk.Button(
+            input_row,
+            text="浏览...",
+            command=self.browse_input
+        ).pack(side=tk.RIGHT)
         
-        ttk.Label(input_frame, text="输入:").pack(side=tk.LEFT)
-        self.input_entry = ttk.Entry(input_frame, textvariable=self.input_path)
-        self.input_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(10, 10))
-        self.input_button = ttk.Button(input_frame, text="选择文件", 
-                                      command=self.select_input)
-        self.input_button.pack(side=tk.RIGHT)
+        # 输出文件选择
+        output_frame = ttk.LabelFrame(main_frame, text="输出文件", padding="10")
+        output_frame.pack(fill=tk.X, pady=(0, 15))
         
-        # 输出
-        output_frame = ttk.Frame(file_frame)
-        output_frame.pack(fill=tk.X)
+        output_row = ttk.Frame(output_frame)
+        output_row.pack(fill=tk.X)
         
-        ttk.Label(output_frame, text="输出:").pack(side=tk.LEFT)
-        self.output_entry = ttk.Entry(output_frame, textvariable=self.output_path)
-        self.output_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(10, 10))
-        self.output_button = ttk.Button(output_frame, text="保存为", 
-                                       command=self.select_output)
-        self.output_button.pack(side=tk.RIGHT)
+        self.output_var = tk.StringVar()
+        output_entry = ttk.Entry(output_row, textvariable=self.output_var)
+        output_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 10))
         
-        # 选项设置
-        options_frame = ttk.LabelFrame(main_frame, text="输出格式", padding="10")
-        options_frame.pack(fill=tk.X, pady=(0, 10))
+        ttk.Button(
+            output_row,
+            text="浏览...",
+            command=self.browse_output
+        ).pack(side=tk.RIGHT)
         
-        formats = [("摘要格式", "summary"), ("JSON格式", "json"), ("纯文本", "text")]
-        for text, value in formats:
-            ttk.Radiobutton(options_frame, text=text, 
-                           variable=self.output_format, value=value).pack(side=tk.LEFT, padx=(0, 20))
+        # 处理选项
+        options_frame = ttk.LabelFrame(main_frame, text="处理选项", padding="10")
+        options_frame.pack(fill=tk.X, pady=(0, 20))
         
-        # 控制按钮
-        control_frame = ttk.Frame(main_frame)
-        control_frame.pack(pady=(0, 10))
+        self.basic_processing_var = tk.BooleanVar(value=True)
+        ttk.Checkbutton(
+            options_frame,
+            text="基础文本处理",
+            variable=self.basic_processing_var
+        ).pack(side=tk.LEFT, padx=(0, 20))
         
-        self.process_button = ttk.Button(control_frame, text="🚀 开始处理", 
-                                        command=self.start_processing)
-        self.process_button.pack(side=tk.LEFT, padx=(0, 10))
+        self.word_count_var = tk.BooleanVar(value=True)
+        ttk.Checkbutton(
+            options_frame,
+            text="词数统计",
+            variable=self.word_count_var
+        ).pack(side=tk.LEFT, padx=(0, 20))
         
-        self.stop_button = ttk.Button(control_frame, text="⏹ 停止", 
-                                     command=self.stop_processing, state=tk.DISABLED)
-        self.stop_button.pack(side=tk.LEFT, padx=(0, 10))
+        # 操作按钮
+        button_frame = ttk.Frame(main_frame)
+        button_frame.pack(fill=tk.X, pady=(0, 20))
         
-        self.clear_button = ttk.Button(control_frame, text="🗑 清空", 
-                                      command=self.clear_all)
-        self.clear_button.pack(side=tk.LEFT)
+        ttk.Button(
+            button_frame,
+            text="开始处理",
+            command=self.process_file
+        ).pack(side=tk.LEFT, padx=(0, 10))
         
-        # 进度条
-        progress_frame = ttk.Frame(main_frame)
-        progress_frame.pack(fill=tk.X, pady=(0, 10))
-        
-        self.progress_bar = ttk.Progressbar(progress_frame, variable=self.progress_var)
-        self.progress_bar.pack(fill=tk.X, pady=(0, 5))
-        
-        self.status_label = ttk.Label(progress_frame, textvariable=self.status_var)
-        self.status_label.pack()
+        ttk.Button(
+            button_frame,
+            text="清空",
+            command=self.clear_form
+        ).pack(side=tk.LEFT)
         
         # 结果显示
         result_frame = ttk.LabelFrame(main_frame, text="处理结果", padding="10")
         result_frame.pack(fill=tk.BOTH, expand=True)
         
-        # 创建标签页
-        self.notebook = ttk.Notebook(result_frame)
-        self.notebook.pack(fill=tk.BOTH, expand=True)
+        self.result_text = scrolledtext.ScrolledText(
+            result_frame,
+            wrap=tk.WORD,
+            height=15
+        )
+        self.result_text.pack(fill=tk.BOTH, expand=True)
         
-        # 摘要标签
-        summary_frame = ttk.Frame(self.notebook)
-        self.notebook.add(summary_frame, text="处理摘要")
-        self.summary_text = scrolledtext.ScrolledText(summary_frame, wrap=tk.WORD, 
-                                                     font=('Consolas', 10))
-        self.summary_text.pack(fill=tk.BOTH, expand=True)
+        # 状态栏
+        self.status_var = tk.StringVar(value="准备就绪")
+        status_label = ttk.Label(main_frame, textvariable=self.status_var)
+        status_label.pack(side=tk.BOTTOM, fill=tk.X, pady=(10, 0))
         
-        # 详细结果标签
-        detail_frame = ttk.Frame(self.notebook)
-        self.notebook.add(detail_frame, text="详细结果")
-        self.detail_text = scrolledtext.ScrolledText(detail_frame, wrap=tk.WORD, 
-                                                    font=('Consolas', 10))
-        self.detail_text.pack(fill=tk.BOTH, expand=True)
+    def browse_input(self):
+        """浏览输入文件"""
+        filename = filedialog.askopenfilename(
+            title="选择输入文件",
+            filetypes=[
+                ("文本文件", "*.txt"),
+                ("所有文件", "*.*")
+            ]
+        )
+        if filename:
+            self.input_var.set(filename)
+            # 自动设置输出文件名
+            input_path = Path(filename)
+            output_path = input_path.parent / f"{input_path.stem}_processed.txt"
+            self.output_var.set(str(output_path))
+            
+    def browse_output(self):
+        """浏览输出文件"""
+        filename = filedialog.asksaveasfilename(
+            title="选择输出文件",
+            defaultextension=".txt",
+            filetypes=[
+                ("文本文件", "*.txt"),
+                ("所有文件", "*.*")
+            ]
+        )
+        if filename:
+            self.output_var.set(filename)
+            
+    def clear_form(self):
+        """清空表单"""
+        self.input_var.set("")
+        self.output_var.set("")
+        self.result_text.delete(1.0, tk.END)
+        self.status_var.set("准备就绪")
         
-        # 日志标签
-        log_frame = ttk.Frame(self.notebook)
-        self.notebook.add(log_frame, text="处理日志")
-        self.log_text = scrolledtext.ScrolledText(log_frame, wrap=tk.WORD, 
-                                                 font=('Consolas', 9))
-        self.log_text.pack(fill=tk.BOTH, expand=True)
+    def process_file(self):
+        """处理文件"""
+        input_file = self.input_var.get().strip()
+        output_file = self.output_var.get().strip()
         
-        # 底部按钮
-        bottom_frame = ttk.Frame(result_frame)
-        bottom_frame.pack(fill=tk.X, pady=(10, 0))
-        
-        ttk.Button(bottom_frame, text="💾 保存结果", 
-                  command=self.save_result).pack(side=tk.LEFT, padx=(0, 5))
-        ttk.Button(bottom_frame, text="📋 复制", 
-                  command=self.copy_result).pack(side=tk.LEFT, padx=(0, 5))
-        ttk.Button(bottom_frame, text="🗑 清除结果", 
-                  command=self.clear_results).pack(side=tk.LEFT)
-    
-    def on_mode_change(self):
-        """处理模式改变"""
-        mode = self.processing_mode.get()
-        if mode == "single":
-            self.input_button.config(text="选择文件")
-            self.output_button.config(text="保存为")
-        else:
-            self.input_button.config(text="选择文件夹")
-            self.output_button.config(text="输出文件夹")
-    
-    def select_input(self):
-        """选择输入"""
-        mode = self.processing_mode.get()
-        
-        if mode == "single":
-            filename = filedialog.askopenfilename(
-                title="选择要处理的文件",
-                filetypes=[
-                    ("文本文件", "*.txt"),
-                    ("CSV文件", "*.csv"),
-                    ("JSON文件", "*.json"),
-                    ("PDF文件", "*.pdf"),
-                    ("Excel文件", "*.xlsx *.xls"),
-                    ("所有文件", "*.*")
-                ]
-            )
-            if filename:
-                self.input_path.set(filename)
-                # 自动设置输出路径
-                if not self.output_path.get():
-                    base_name = Path(filename).stem
-                    ext = ".json" if self.output_format.get() == "json" else ".txt"
-                    self.output_path.set(f"{base_name}_processed{ext}")
-        else:
-            dirname = filedialog.askdirectory(title="选择要处理的文件夹")
-            if dirname:
-                self.input_path.set(dirname)
-                if not self.output_path.get():
-                    self.output_path.set(f"{dirname}_processed")
-    
-    def select_output(self):
-        """选择输出"""
-        mode = self.processing_mode.get()
-        
-        if mode == "single":
-            ext = ".json" if self.output_format.get() == "json" else ".txt"
-            filename = filedialog.asksaveasfilename(
-                title="保存处理结果",
-                defaultextension=ext,
-                filetypes=[
-                    ("文本文件", "*.txt"),
-                    ("JSON文件", "*.json"),
-                    ("所有文件", "*.*")
-                ]
-            )
-            if filename:
-                self.output_path.set(filename)
-        else:
-            dirname = filedialog.askdirectory(title="选择输出文件夹")
-            if dirname:
-                self.output_path.set(dirname)
-    
-    def start_processing(self):
-        """开始处理"""
-        if self.is_processing:
+        if not input_file:
+            messagebox.showerror("错误", "请选择输入文件")
             return
-        
-        if not self.validate_inputs():
+            
+        if not output_file:
+            messagebox.showerror("错误", "请指定输出文件")
             return
+            
+        if not Path(input_file).exists():
+            messagebox.showerror("错误", "输入文件不存在")
+            return
+            
+        # 在后台线程中处理
+        self.current_task = threading.Thread(
+            target=self._process_file_worker,
+            args=(input_file, output_file),
+            daemon=True
+        )
+        self.current_task.start()
         
-        # 更新UI
-        self.is_processing = True
-        self.process_button.config(state=tk.DISABLED)
-        self.stop_button.config(state=tk.NORMAL)
-        self.progress_var.set(0)
-        self.status_var.set("开始处理...")
-        self.clear_results()
+        # 开始检查结果
+        self.check_result()
         
-        # 启动处理线程
-        thread = threading.Thread(target=self.process_files, daemon=True)
-        thread.start()
-    
-    def stop_processing(self):
-        """停止处理"""
-        self.is_processing = False
-        self.status_var.set("正在停止...")
-    
-    def clear_all(self):
-        """清空所有"""
-        if self.is_processing:
-            if not messagebox.askyesno("确认", "正在处理中，确定要清空吗？"):
-                return
-            self.stop_processing()
-        
-        self.input_path.set("")
-        self.output_path.set("")
-        self.progress_var.set(0)
-        self.status_var.set("就绪")
-        self.clear_results()
-    
-    def clear_results(self):
-        """清空结果"""
-        self.summary_text.delete(1.0, tk.END)
-        self.detail_text.delete(1.0, tk.END)
-        self.log_text.delete(1.0, tk.END)
-    
-    def validate_inputs(self):
-        """验证输入"""
-        if not self.input_path.get():
-            messagebox.showerror("错误", "请选择输入文件或文件夹")
-            return False
-        
-        if not self.output_path.get():
-            messagebox.showerror("错误", "请设置输出路径")
-            return False
-        
-        input_path = Path(self.input_path.get())
-        if not input_path.exists():
-            messagebox.showerror("错误", f"输入路径不存在: {input_path}")
-            return False
-        
-        return True
-    
-    def process_files(self):
-        """处理文件（线程函数）"""
+    def _process_file_worker(self, input_file, output_file):
+        """文件处理工作线程"""
         try:
-            input_path = self.input_path.get()
-            output_path = self.output_path.get()
-            mode = self.processing_mode.get()
-            output_format = self.output_format.get()
+            self.status_var.set("正在读取文件...")
             
-            self.queue.put(("log", f"开始处理: {input_path}"))
-            
-            if mode == "single":
-                self.process_single_file(input_path, output_path, output_format)
-            else:
-                self.process_batch_files(input_path, output_path, output_format)
-                
-        except Exception as e:
-            self.queue.put(("error", f"处理出错: {str(e)}"))
-        finally:
-            self.queue.put(("finished", None))
-    
-    def process_single_file(self, input_path, output_path, output_format):
-        """处理单个文件"""
-        try:
-            self.queue.put(("status", "读取文件..."))
-            self.queue.put(("progress", 10))
-            
-            # 检查模块是否可用
-            if not file_handler or not text_processor:
-                # 使用简化处理
-                with open(input_path, 'r', encoding='utf-8') as f:
+            # 读取文件
+            try:
+                with open(input_file, 'r', encoding='utf-8') as f:
                     content = f.read()
-                
-                self.queue.put(("status", "处理文本..."))
-                self.queue.put(("progress", 50))
-                
-                # 简单处理
-                processed_content = f"文件: {input_path}\n"
-                processed_content += f"字符数: {len(content)}\n"
-                processed_content += f"词数: {len(content.split())}\n"
-                processed_content += f"行数: {len(content.splitlines())}\n\n"
-                processed_content += "原始内容:\n" + content[:1000]
-                if len(content) > 1000:
-                    processed_content += "\n...(内容过长，已截断)"
-                
-            else:
-                # 使用完整处理
-                content = file_handler.read_file(input_path)
-                if content is None:
-                    self.queue.put(("error", "无法读取文件"))
-                    return
-                
-                self.queue.put(("status", "分析文本..."))
-                self.queue.put(("progress", 50))
-                
-                result = text_processor.process_text(content)
-                
-                if output_format == "json":
-                    processed_content = result_formatter.to_json(result)
-                elif output_format == "summary":
-                    processed_content = result_formatter.to_summary_text(result)
-                else:
-                    processed_content = result.processed_text
+            except UnicodeDecodeError:
+                # 尝试其他编码
+                try:
+                    with open(input_file, 'r', encoding='gbk') as f:
+                        content = f.read()
+                except UnicodeDecodeError:
+                    with open(input_file, 'r', encoding='iso-8859-1') as f:
+                        content = f.read()
             
-            self.queue.put(("status", "保存文件..."))
-            self.queue.put(("progress", 90))
+            self.status_var.set("正在处理文本...")
+            
+            # 基础处理
+            processed_content = self.simple_text_processing(content)
+            
+            # 生成结果
+            result = self.generate_result(content, processed_content)
+            
+            self.status_var.set("正在保存文件...")
             
             # 保存文件
-            with open(output_path, 'w', encoding='utf-8') as f:
-                f.write(processed_content)
+            with open(output_file, 'w', encoding='utf-8') as f:
+                f.write(result)
             
-            self.queue.put(("progress", 100))
-            self.queue.put(("status", "处理完成"))
-            self.queue.put(("success", f"文件已保存到: {output_path}"))
-            self.queue.put(("summary", processed_content[:1000]))
-            self.queue.put(("detail", processed_content))
+            self.result_queue.put(("success", result, output_file))
             
         except Exception as e:
-            self.queue.put(("error", f"处理文件失败: {str(e)}"))
-    
-    def process_batch_files(self, input_folder, output_folder, output_format):
-        """批量处理文件"""
+            self.result_queue.put(("error", str(e)))
+            
+    def simple_text_processing(self, text):
+        """简单文本处理"""
+        if not text:
+            return ""
+            
+        # 基础清理
+        import re
+        
+        # 去除多余空白
+        text = re.sub(r'\s+', ' ', text).strip()
+        
+        # 分词（简单按空格分割）
+        words = text.split()
+        
+        # 去除标点符号
+        import string
+        words = [word.strip(string.punctuation) for word in words if word.strip(string.punctuation)]
+        
+        return ' '.join(words)
+        
+    def generate_result(self, original_text, processed_text):
+        """生成结果"""
+        result_parts = []
+        
+        # 基本统计
+        result_parts.append("=== 文件处理结果 ===\n")
+        
+        if self.word_count_var.get():
+            original_words = len(original_text.split())
+            processed_words = len(processed_text.split())
+            char_count = len(original_text)
+            
+            result_parts.append(f"原始字符数: {char_count}")
+            result_parts.append(f"原始词数: {original_words}")
+            result_parts.append(f"处理后词数: {processed_words}")
+            result_parts.append("")
+        
+        if self.basic_processing_var.get():
+            result_parts.append("=== 处理后文本 ===")
+            result_parts.append(processed_text)
+            result_parts.append("")
+            
+        result_parts.append("=== 原始文本 ===")
+        result_parts.append(original_text)
+        
+        return '\n'.join(result_parts)
+        
+    def check_result(self):
+        """检查处理结果"""
         try:
-            self.queue.put(("status", "扫描文件..."))
+            result = self.result_queue.get_nowait()
             
-            input_path = Path(input_folder)
-            output_path = Path(output_folder)
-            output_path.mkdir(parents=True, exist_ok=True)
-            
-            # 获取文件列表
-            files = []
-            for ext in ['.txt', '.csv', '.json']:
-                files.extend(input_path.glob(f'*{ext}'))
-            
-            if not files:
-                self.queue.put(("error", "没有找到支持的文件"))
-                return
-            
-            self.queue.put(("log", f"找到 {len(files)} 个文件"))
-            
-            processed = 0
-            errors = 0
-            
-            for i, file_path in enumerate(files):
-                if not self.is_processing:
-                    break
+            if result[0] == "success":
+                _, result_text, output_file = result
+                self.status_var.set(f"处理完成: {output_file}")
                 
-                try:
-                    self.queue.put(("status", f"处理 {file_path.name}..."))
-                    
-                    # 简单处理
-                    with open(file_path, 'r', encoding='utf-8') as f:
-                        content = f.read()
-                    
-                    processed_content = f"文件: {file_path.name}\n内容:\n{content[:500]}"
-                    
-                    output_file = output_path / f"{file_path.stem}_processed.txt"
-                    with open(output_file, 'w', encoding='utf-8') as f:
-                        f.write(processed_content)
-                    
-                    processed += 1
-                    progress = (i + 1) / len(files) * 100
-                    self.queue.put(("progress", progress))
-                    
-                except Exception as e:
-                    errors += 1
-                    self.queue.put(("log", f"处理 {file_path.name} 失败: {str(e)}"))
-            
-            summary = f"批量处理完成:\n成功: {processed}\n失败: {errors}\n总计: {len(files)}"
-            self.queue.put(("success", summary))
-            self.queue.put(("summary", summary))
-            
-        except Exception as e:
-            self.queue.put(("error", f"批量处理失败: {str(e)}"))
-    
-    def check_queue(self):
-        """检查队列消息"""
-        try:
-            while True:
-                msg_type, data = self.queue.get_nowait()
+                # 显示结果
+                self.result_text.delete(1.0, tk.END)
+                self.result_text.insert(1.0, result_text)
                 
-                if msg_type == "status":
-                    self.status_var.set(data)
-                elif msg_type == "progress":
-                    self.progress_var.set(data)
-                elif msg_type == "log":
-                    self.log_text.insert(tk.END, f"[{time.strftime('%H:%M:%S')}] {data}\n")
-                    self.log_text.see(tk.END)
-                elif msg_type == "summary":
-                    self.summary_text.insert(tk.END, data)
-                elif msg_type == "detail":
-                    self.detail_text.insert(tk.END, data)
-                elif msg_type == "success":
-                    messagebox.showinfo("成功", data)
-                elif msg_type == "error":
-                    messagebox.showerror("错误", data)
-                elif msg_type == "finished":
-                    self.on_finished()
-                    
+                messagebox.showinfo("成功", f"文件处理完成!\n输出文件: {output_file}")
+                
+            elif result[0] == "error":
+                self.status_var.set("处理失败")
+                messagebox.showerror("错误", f"处理失败: {result[1]}")
+                
         except queue.Empty:
-            pass
-        finally:
-            self.root.after(100, self.check_queue)
-    
-    def on_finished(self):
-        """处理完成"""
-        self.is_processing = False
-        self.process_button.config(state=tk.NORMAL)
-        self.stop_button.config(state=tk.DISABLED)
-        
-        if not self.status_var.get().endswith("完成"):
-            self.status_var.set("就绪")
-    
-    def save_result(self):
-        """保存结果"""
-        current_tab = self.notebook.select()
-        tab_text = self.notebook.tab(current_tab, "text")
-        
-        if tab_text == "处理摘要":
-            content = self.summary_text.get(1.0, tk.END).strip()
-        elif tab_text == "详细结果":
-            content = self.detail_text.get(1.0, tk.END).strip()
-        else:
-            content = self.log_text.get(1.0, tk.END).strip()
-        
-        if not content:
-            messagebox.showwarning("警告", "没有内容可保存")
-            return
-        
-        filename = filedialog.asksaveasfilename(
-            title="保存结果",
-            defaultextension=".txt",
-            filetypes=[("文本文件", "*.txt"), ("所有文件", "*.*")]
-        )
-        
-        if filename:
-            try:
-                with open(filename, 'w', encoding='utf-8') as f:
-                    f.write(content)
-                messagebox.showinfo("成功", "结果已保存")
-            except Exception as e:
-                messagebox.showerror("错误", f"保存失败: {e}")
-    
-    def copy_result(self):
-        """复制结果"""
-        current_tab = self.notebook.select()
-        tab_text = self.notebook.tab(current_tab, "text")
-        
-        if tab_text == "处理摘要":
-            content = self.summary_text.get(1.0, tk.END).strip()
-        elif tab_text == "详细结果":
-            content = self.detail_text.get(1.0, tk.END).strip()
-        else:
-            content = self.log_text.get(1.0, tk.END).strip()
-        
-        if not content:
-            messagebox.showwarning("警告", "没有内容可复制")
-            return
-        
-        self.root.clipboard_clear()
-        self.root.clipboard_append(content)
-        messagebox.showinfo("成功", "内容已复制到剪贴板")
-    
+            # 如果队列为空且任务还在运行，继续检查
+            if self.current_task and self.current_task.is_alive():
+                self.root.after(100, self.check_result)
+            else:
+                if not hasattr(self, '_result_checked'):
+                    self.status_var.set("准备就绪")
+                    self._result_checked = True
+                    
     def run(self):
         """运行GUI"""
         self.root.mainloop()
@@ -534,10 +307,11 @@ class SimpleFileProcessorGUI:
 def main():
     """主函数"""
     try:
+        print("🚀 启动简化版GUI...")
         app = SimpleFileProcessorGUI()
         app.run()
     except Exception as e:
-        print(f"GUI启动失败: {e}")
+        print(f"❌ 启动失败: {e}")
         import traceback
         traceback.print_exc()
 

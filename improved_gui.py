@@ -683,8 +683,8 @@ class SmartFileProcessorGUI:
         )
         status_label.pack(side=tk.LEFT, padx=5, pady=2)
         
-                 # 配置信息
-         config_info = f"模型: {len(config.get('nlp.models', {}))} | 最大文件: {config.get('processing.max_file_size_mb')}MB"
+        # 配置信息
+        config_info = f"模型: {len(config.get('nlp.models', {}))} | 最大文件: {config.get('processing.max_file_size_mb')}MB"
         ttk.Label(
             status_frame,
             text=config_info,

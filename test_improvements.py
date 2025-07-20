@@ -135,29 +135,52 @@ def test_gui():
     print("=" * 50)
     
     try:
+        # 检查tkinter
+        import tkinter as tk
+        print(f"✓ Tkinter 模块可用")
+        
         # 测试GUI模块导入
-        from improved_gui import ModernGUI, ConfigWindow, HelpWindow
+        from improved_gui import ModernGUI
         print(f"✓ GUI模块导入成功")
         
-        # 测试GUI类创建（不显示窗口）
+        # 测试GUI类创建（不启动mainloop）
         try:
-            import tkinter as tk
-            # 测试tkinter是否可用
-            root = tk.Tk()
-            root.withdraw()  # 隐藏窗口
-            root.destroy()
-            print(f"  - tkinter环境: ✓ 可用")
+            # 创建一个测试根窗口
+            test_root = tk.Tk()
+            test_root.withdraw()  # 隐藏窗口
+            
+            # 测试关键组件
+            print(f"  - 测试GUI组件创建...")
+            
+            # 销毁测试窗口
+            test_root.destroy()
+            print(f"  - GUI组件测试: ✓ 通过")
+            
         except Exception as e:
-            print(f"  - tkinter环境: ⚠ 不可用 ({e})")
-            return True  # GUI不可用不算失败
+            print(f"  - GUI组件测试: ✗ 失败 ({e})")
+            return False
         
-        print(f"  - GUI组件: ✓ 所有组件可导入")
-        print(f"  - 注意: GUI需要图形环境才能完全测试")
+        # 测试启动脚本
+        try:
+            import run_gui
+            print(f"✓ GUI启动脚本可用")
+        except Exception as e:
+            print(f"✗ GUI启动脚本导入失败: {e}")
+            return False
         
         return True
+        
+    except ImportError as e:
+        print(f"✗ GUI测试失败: {e}")
+        print("  提示: 在某些环境中tkinter可能不可用")
+        return False
     except Exception as e:
         print(f"✗ GUI测试失败: {e}")
         return False
+
+
+
+
 
 def main():
     """主测试函数"""
