@@ -47,23 +47,29 @@ python gui_launcher.py
 
 ### 🎨 GUI界面版本
 
-1. **原版GUI** (`gui.py`) - 简洁实用
+1. **📝 原版GUI** (`gui.py`) - 简洁实用
    ```bash
    python gui.py
    ```
+   - 基础文件处理功能
+   - 简单易用的界面
+   - 轻量级设计
 
-2. **现代GUI** (`improved_gui.py`) - 功能丰富
+2. **🎨 现代化GUI** (`modern_gui.py`) - 功能丰富
    ```bash
-   python improved_gui.py
+   python modern_gui.py
    ```
+   - 选项卡界面设计
+   - 配置管理功能
+   - 进度显示和结果查看
 
-3. **高级GUI** (`advanced_gui.py`) - 完整体验
+3. **✨ 高级GUI** (`premium_gui.py`) - 专业体验
    ```bash
-   python advanced_gui.py
+   python premium_gui.py
    ```
-   > 注意：高级GUI需要安装 `tkinterdnd2` 支持拖拽功能
-python run_gui.py
-```
+   - 现代卡片式布局
+   - 实时统计和动画效果
+   - 处理报告导出功能
 
 **Linux/Mac用户:**
 ```bash
